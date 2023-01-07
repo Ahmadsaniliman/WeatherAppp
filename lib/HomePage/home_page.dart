@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:new_weather_appppppp/Constants/emuns.dart';
+import 'package:new_weather_appppppp/Constants/routes.dart';
+import 'package:new_weather_appppppp/Model/weather_model.dart';
+import 'package:new_weather_appppppp/network/network.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -8,26 +12,26 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late final Future<WeatherModel> weatherData;
+  String cityName = 'mumbai';
+  @override
+  void initState() {
+    super.initState();
+    weatherData = Network().getWeatherInfo(cityName: cityName);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        height: 60.0,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Image.asset('assets/images/Vector (5).png'),
-            Image.asset('assets/images/Vector (6).png'),
-            Image.asset('assets/images/Vector (5).png'),
-            Image.asset('assets/images/Vector (8).png'),
-          ],
-        ),
+      bottomNavigationBar: const BottomNavigatorAction(
+        selectedMenu: navBarElements.home,
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20.0,
-          vertical: 25.0,
+        padding: const EdgeInsets.only(
+          right: 20.0,
+          left: 20.0,
+          top: 30.0,
+          bottom: 20.0,
         ),
         child: Column(
           children: [
@@ -145,9 +149,18 @@ class _HomePageState extends State<HomePage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: const [
-                      DailyForeCaset(),
-                      DailyForeCaset(),
-                      DailyForeCaset(),
+                      DailyForeCaset(
+                        image: 'assets/images/Cloud 3 zap.png',
+                        text: 'Sunny Day',
+                      ),
+                      DailyForeCaset(
+                        image: 'assets/images/Big rain drops (2).png',
+                        text: 'Sunny Day',
+                      ),
+                      DailyForeCaset(
+                        image: 'assets/images/Mid snow fast winds.png',
+                        text: 'Sunny Day',
+                      ),
                     ],
                   ),
                 ),
@@ -169,10 +182,26 @@ class _HomePageState extends State<HomePage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: const [
-                        TempForeCaset(),
-                        TempForeCaset(),
-                        TempForeCaset(),
-                        TempForeCaset(),
+                        TempForeCaset(
+                          text1: '18*C',
+                          image: 'assets/images/Sun cloud little rain.png',
+                          text2: '7:00',
+                        ),
+                        TempForeCaset(
+                          text1: '28*C',
+                          image: 'assets/images/Cloud 3 zap.png',
+                          text2: '14:00',
+                        ),
+                        TempForeCaset(
+                          text1: '21*C',
+                          image: 'assets/images/Big rain drops (1).png',
+                          text2: '3:50',
+                        ),
+                        TempForeCaset(
+                          text1: '7*C',
+                          image: 'assets/images/Cloud 3 zap.png',
+                          text2: '49:00',
+                        ),
                       ],
                     )
                   ],
@@ -186,10 +215,151 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+class BottomNavigatorAction extends StatelessWidget {
+  const BottomNavigatorAction({
+    Key? key,
+    required this.selectedMenu,
+  }) : super(key: key);
+  final navBarElements selectedMenu;
+  final index = navBarElements.home;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 20.0,
+        vertical: 10.0,
+      ),
+      height: 60.0,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).pushNamed(
+                homePageRoute,
+              );
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Image.asset(
+                  'assets/images/Vector (5).png',
+                  width: 25.0,
+                  color: selectedMenu == navBarElements.home
+                      ? Colors.black12
+                      : Colors.white,
+                ),
+                Container(
+                  height: 5.0,
+                  width: 10.0,
+                  decoration: BoxDecoration(
+                    color: index == navBarElements.home
+                        ? Colors.black
+                        : Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).pushNamed(
+                detailsPageRoute,
+              );
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const SizedBox(),
+                Image.asset(
+                  'assets/images/Vector (6).png',
+                  width: 35,
+                  color: selectedMenu == navBarElements.details
+                      ? Colors.black
+                      : null,
+                ),
+                Container(
+                  height: 5.0,
+                  width: 10.0,
+                  decoration: BoxDecoration(
+                    color: index == navBarElements.details
+                        ? Colors.black
+                        : Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).pushNamed(
+                detailsPageRoute,
+              );
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Image.asset(
+                  'assets/images/Vector (5).png',
+                  width: 25.0,
+                  //   color:
+                  //       selectedMenu == navBarElements.home ? Colors.black : null,
+                ),
+                Container(
+                  height: 5.0,
+                  width: 10.0,
+                  decoration: BoxDecoration(
+                    color: index == navBarElements.notification
+                        ? Colors.black
+                        : Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          GestureDetector(
+            // onTap : () {Navigator.of(context).pushNamed();},
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Image.asset(
+                  'assets/images/Vector (8).png',
+                  width: 20.0,
+                  //   color:
+                  //       selectedMenu == navBarElements.home ? Colors.black : null,
+                ),
+                Container(
+                  height: 5.0,
+                  width: 10.0,
+                  decoration: BoxDecoration(
+                    color: index == navBarElements.person
+                        ? Colors.black
+                        : Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class TempForeCaset extends StatelessWidget {
   const TempForeCaset({
     Key? key,
+    required this.image,
+    required this.text1,
+    required this.text2,
   }) : super(key: key);
+  final String image;
+  final String text1;
+  final String text2;
 
   @override
   Widget build(BuildContext context) {
@@ -204,19 +374,17 @@ class TempForeCaset extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(
-            '18*C',
-            style: TextStyle(
+          Text(
+            text1,
+            style: const TextStyle(
               fontSize: 10.0,
               color: Colors.white,
             ),
           ),
-          Image.asset(
-            'assets/images/Cloud 3 zap.png',
-          ),
-          const Text(
-            '12:00',
-            style: TextStyle(
+          Image.asset(image),
+          Text(
+            text2,
+            style: const TextStyle(
               fontSize: 10.0,
               color: Colors.white,
             ),
@@ -230,7 +398,10 @@ class TempForeCaset extends StatelessWidget {
 class DailyForeCaset extends StatelessWidget {
   const DailyForeCaset({
     Key? key,
+    required this.image,
+    required this.text,
   }) : super(key: key);
+  final String image, text;
 
   @override
   Widget build(BuildContext context) {
@@ -245,10 +416,10 @@ class DailyForeCaset extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Image.asset('assets/images/Cloud 3 zap.png'),
-          const Text(
-            'Sunny Day',
-            style: TextStyle(
+          Image.asset(image),
+          Text(
+            text,
+            style: const TextStyle(
               fontSize: 10.0,
               color: Colors.white,
             ),
@@ -256,12 +427,5 @@ class DailyForeCaset extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class GGGG extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
   }
 }
