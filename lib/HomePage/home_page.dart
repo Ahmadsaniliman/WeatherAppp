@@ -258,3 +258,10 @@ class DailyForeCaset extends StatelessWidget {
     );
   }
 }
+
+class GGGG extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
