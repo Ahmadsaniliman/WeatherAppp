@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:new_weather_appppppp/Constants/emuns.dart';
 import 'package:new_weather_appppppp/Constants/routes.dart';
 import 'package:new_weather_appppppp/DetailsPage/details_page.dart';
-import 'package:new_weather_appppppp/Model/weather_model.dart';
-import 'package:new_weather_appppppp/network/network.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -13,7 +11,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-//   late final Future<WeatherModel> weatherData;
+//   late final Future<WeatherModel> snapshot;
 //   String cityName = 'mumbai';
 //   @override
 //   void initState() {
@@ -21,7 +19,7 @@ class _HomePageState extends State<HomePage> {
 //     weatherData = Network().getWeatherInfo(cityName: cityName);
 //   }
 
-  late final WeatherModel snapshot;
+//   late final WeatherModel snapshot;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,35 +93,35 @@ class _HomePageState extends State<HomePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Text(
-                            snapshot.location.localtime.toString(),
+                          const Text(
+                            'Monday,10 January',
                             // snapshot.data!.location.localtime,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 15.0,
                               color: Colors.white,
                             ),
                           ),
-                          Text(
-                            snapshot.location.name,
-                            style: const TextStyle(
+                          const Text(
+                            'New York',
+                            style: TextStyle(
                               fontSize: 10.0,
                               color: Colors.white,
                             ),
                           ),
-                          Text(
-                            snapshot.current.tempC.toString(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 40.0,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          //   Text(
+                          //     snapshot.current.tempC.toString(),
+                          //     style: const TextStyle(
+                          //       color: Colors.white,
+                          //       fontSize: 40.0,
+                          //       fontWeight: FontWeight.bold,
+                          //     ),
+                          //   ),
+                          Image.asset(
+                            'assets/images/29.png',
                           ),
-                          // Image.asset(
-                          //   'assets/images/29.png',
-                          // ),
-                          Text(
-                            snapshot.current.condition.text,
-                            style: const TextStyle(
+                          const Text(
+                            'Sunny Cloudy',
+                            style: TextStyle(
                               fontSize: 15.0,
                               color: Colors.white,
                             ),
@@ -168,16 +166,16 @@ class _HomePageState extends State<HomePage> {
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const DailyForeCaset(
+                    children: const [
+                      DailyForeCaset(
                         image: 'assets/images/Cloud 3 zap.png',
                         text: 'Sunny Day',
                       ),
-                      const DailyForeCaset(
+                      DailyForeCaset(
                           image: 'assets/images/Zaps.png', text: 'Thunder'),
                       DailyForeCaset(
                         image: 'assets/images/Mid snow fast winds.png',
-                        text: '${snapshot.current.windKph} Kph',
+                        text: 'Wind Kph',
                       ),
                     ],
                   ),
@@ -199,32 +197,26 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(height: 15.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                      children: const [
                         TempForeCaset(
-                          text1: snapshot.current.tempC.toString(),
+                          text1: '18*C',
                           image: 'assets/images/Sun cloud little rain.png',
-                          text2: '7:00',
+                          text2: '07:00',
                         ),
                         TempForeCaset(
-                          text1: snapshot
-                              .forecast.forecastday[0].hour[0].heatindexC
-                              .toString(),
+                          text1: '20*C',
                           image: 'assets/images/Cloud 3 zap.png',
-                          text2: 'Heat',
+                          text2: '09:00',
                         ),
                         TempForeCaset(
-                          text1: snapshot
-                              .forecast.forecastday[0].hour[0].chanceOfRain
-                              .toString(),
+                          text1: '23*C',
                           image: 'assets/images/Big rain drops (1).png',
-                          text2: 'Rain',
+                          text2: '12:00',
                         ),
                         TempForeCaset(
-                          text1: snapshot
-                              .forecast.forecastday[0].hour[0].chanceOfSnow
-                              .toString(),
+                          text1: '25*C',
                           image: 'assets/images/Cloud 3 zap.png',
-                          text2: 'Snow',
+                          text2: '15:00',
                         ),
                       ],
                     )
@@ -245,7 +237,7 @@ class BottomNavigatorAction extends StatelessWidget {
     required this.selectedMenu,
   }) : super(key: key);
   final navBarElements selectedMenu;
-  final index = navBarElements;
+  final index = 0;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -270,49 +262,19 @@ class BottomNavigatorAction extends StatelessWidget {
                   'assets/images/Vector (5).png',
                   width: 25.0,
                   color: selectedMenu == navBarElements.home
-                      ? Colors.black12
-                      : Colors.white,
-                ),
-                Container(
-                  height: 5.0,
-                  width: 10.0,
-                  decoration: BoxDecoration(
-                    color: index == navBarElements.home
-                        ? Colors.black
-                        : Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.of(context).pushNamed(
-                detailsPageRoute,
-              );
-            },
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const SizedBox(),
-                Image.asset(
-                  'assets/images/Vector (6).png',
-                  width: 35,
-                  color: selectedMenu == navBarElements.details
                       ? Colors.black
-                      : null,
+                      : Colors.black26,
                 ),
-                Container(
-                  height: 5.0,
-                  width: 10.0,
-                  decoration: BoxDecoration(
-                    color: index == navBarElements.details
-                        ? Colors.black
-                        : Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                ),
+                // Container(
+                //   height: 5.0,
+                //   width: 10.0,
+                //   decoration: BoxDecoration(
+                //     color: index == selectedMenu.index
+                //         ? Colors.black
+                //         : Colors.white,
+                //     shape: BoxShape.circle,
+                //   ),
+                // ),
               ],
             ),
           ),
@@ -325,22 +287,69 @@ class BottomNavigatorAction extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Image.asset(
-                  'assets/images/Vector (5).png',
-                  width: 25.0,
-                  //   color:
-                  //       selectedMenu == navBarElements.home ? Colors.black : null,
-                ),
+                // const SizedBox(),
                 Container(
-                  height: 5.0,
-                  width: 10.0,
-                  decoration: BoxDecoration(
-                    color: index == navBarElements.notification
-                        ? Colors.black
-                        : Colors.white,
+                  height: 35.0,
+                  width: 40.0,
+                  decoration: const BoxDecoration(
+                    color: Colors.black12,
                     shape: BoxShape.circle,
                   ),
-                ),
+                  child: Image.asset(
+                    'assets/images/Vector (6).png',
+                    width: 35,
+                    color: selectedMenu == navBarElements.details
+                        ? Colors.black
+                        : null,
+                  ),
+                )
+                // Container(
+                //   height: 5.0,
+                //   width: 10.0,
+                //   decoration: BoxDecoration(
+                //     color: index == selectedMenu.index
+                //         ? Colors.black
+                //         : Colors.white,
+                //     shape: BoxShape.circle,
+                //   ),
+                // ),
+              ],
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).pushNamed(
+                detailsPageRoute,
+              );
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  height: 35.0,
+                  width: 40.0,
+                  decoration: const BoxDecoration(
+                    color: Colors.black12,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Image.asset(
+                    'assets/images/Vector (7).png',
+                    width: 35,
+                    color: selectedMenu == navBarElements.details
+                        ? Colors.black
+                        : null,
+                  ),
+                )
+                // Container(
+                //   height: 5.0,
+                //   width: 10.0,
+                //   decoration: BoxDecoration(
+                //     color: index == navBarElements.notification
+                //         ? Colors.black
+                //         : Colors.white,
+                //     shape: BoxShape.circle,
+                //   ),
+                // ),
               ],
             ),
           ),
@@ -355,16 +364,16 @@ class BottomNavigatorAction extends StatelessWidget {
                   //   color:
                   //       selectedMenu == navBarElements.home ? Colors.black : null,
                 ),
-                Container(
-                  height: 5.0,
-                  width: 10.0,
-                  decoration: BoxDecoration(
-                    color: index == navBarElements.person
-                        ? Colors.black
-                        : Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                ),
+                // Container(
+                //   height: 5.0,
+                //   width: 10.0,
+                //   decoration: BoxDecoration(
+                //     color: index == navBarElements.person
+                //         ? Colors.black
+                //         : Colors.white,
+                //     shape: BoxShape.circle,
+                //   ),
+                // ),
               ],
             ),
           ),
