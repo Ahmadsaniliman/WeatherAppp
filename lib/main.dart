@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(),
       routes: {
         homePageRoute: (context) => const HomePage(),
-        detailsPageRoute: (context) => const DetailsPage(),
+        // detailsPageRoute: (context) => const DetailsPage(),
       },
       home: const HomePage(),
     );

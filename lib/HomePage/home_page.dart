@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:new_weather_appppppp/Constants/emuns.dart';
 import 'package:new_weather_appppppp/Constants/routes.dart';
+import 'package:new_weather_appppppp/DetailsPage/details_page.dart';
 import 'package:new_weather_appppppp/Model/weather_model.dart';
 import 'package:new_weather_appppppp/network/network.dart';
 
@@ -12,14 +13,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late final Future<WeatherModel> weatherData;
-  String cityName = 'mumbai';
-  @override
-  void initState() {
-    super.initState();
-    weatherData = Network().getWeatherInfo(cityName: cityName);
-  }
+//   late final Future<WeatherModel> weatherData;
+//   String cityName = 'mumbai';
+//   @override
+//   void initState() {
+//     super.initState();
+//     weatherData = Network().getWeatherInfo(cityName: cityName);
+//   }
 
+  late final WeatherModel snapshot;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,15 +40,24 @@ class _HomePageState extends State<HomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  height: 60.0,
-                  width: 60.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.0),
-                    border: Border.all(),
-                  ),
-                  child: Image.asset(
-                    'assets/images/double_arrow.png',
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const DetailsPage(),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    height: 60.0,
+                    width: 60.0,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.0),
+                      border: Border.all(),
+                    ),
+                    child: Image.asset(
+                      'assets/images/double_arrow.png',
+                    ),
                   ),
                 ),
                 Container(
@@ -84,26 +95,35 @@ class _HomePageState extends State<HomePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          const Text(
-                            'Tuesday, 14 May',
-                            style: TextStyle(
+                          Text(
+                            snapshot.location.localtime.toString(),
+                            // snapshot.data!.location.localtime,
+                            style: const TextStyle(
                               fontSize: 15.0,
                               color: Colors.white,
                             ),
                           ),
-                          const Text(
-                            'New York',
-                            style: TextStyle(
+                          Text(
+                            snapshot.location.name,
+                            style: const TextStyle(
                               fontSize: 10.0,
                               color: Colors.white,
                             ),
                           ),
-                          Image.asset(
-                            'assets/images/29.png',
+                          Text(
+                            snapshot.current.tempC.toString(),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 40.0,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                          const Text(
-                            'Sunny Cloudy',
-                            style: TextStyle(
+                          // Image.asset(
+                          //   'assets/images/29.png',
+                          // ),
+                          Text(
+                            snapshot.current.condition.text,
+                            style: const TextStyle(
                               fontSize: 15.0,
                               color: Colors.white,
                             ),
@@ -148,18 +168,16 @@ class _HomePageState extends State<HomePage> {
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      DailyForeCaset(
+                    children: [
+                      const DailyForeCaset(
                         image: 'assets/images/Cloud 3 zap.png',
                         text: 'Sunny Day',
                       ),
-                      DailyForeCaset(
-                        image: 'assets/images/Big rain drops (2).png',
-                        text: 'Sunny Day',
-                      ),
+                      const DailyForeCaset(
+                          image: 'assets/images/Zaps.png', text: 'Thunder'),
                       DailyForeCaset(
                         image: 'assets/images/Mid snow fast winds.png',
-                        text: 'Sunny Day',
+                        text: '${snapshot.current.windKph} Kph',
                       ),
                     ],
                   ),
@@ -181,26 +199,32 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(height: 15.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
+                      children: [
                         TempForeCaset(
-                          text1: '18*C',
+                          text1: snapshot.current.tempC.toString(),
                           image: 'assets/images/Sun cloud little rain.png',
                           text2: '7:00',
                         ),
                         TempForeCaset(
-                          text1: '28*C',
+                          text1: snapshot
+                              .forecast.forecastday[0].hour[0].heatindexC
+                              .toString(),
                           image: 'assets/images/Cloud 3 zap.png',
-                          text2: '14:00',
+                          text2: 'Heat',
                         ),
                         TempForeCaset(
-                          text1: '21*C',
+                          text1: snapshot
+                              .forecast.forecastday[0].hour[0].chanceOfRain
+                              .toString(),
                           image: 'assets/images/Big rain drops (1).png',
-                          text2: '3:50',
+                          text2: 'Rain',
                         ),
                         TempForeCaset(
-                          text1: '7*C',
+                          text1: snapshot
+                              .forecast.forecastday[0].hour[0].chanceOfSnow
+                              .toString(),
                           image: 'assets/images/Cloud 3 zap.png',
-                          text2: '49:00',
+                          text2: 'Snow',
                         ),
                       ],
                     )
@@ -221,7 +245,7 @@ class BottomNavigatorAction extends StatelessWidget {
     required this.selectedMenu,
   }) : super(key: key);
   final navBarElements selectedMenu;
-  final index = navBarElements.home;
+  final index = navBarElements;
   @override
   Widget build(BuildContext context) {
     return Container(
